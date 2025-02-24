@@ -64,6 +64,19 @@
             align-items: center;
         }
 
+        .middle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            gap: 10px;
+        }
+
+        .middle button {
+            padding: 10px;
+            border: none;
+        }
+
         #weapon {
             width: 250px;
             height: 350px;
@@ -162,7 +175,7 @@
                 <div class="card"> </div>
             </div>
         </div>
-        <div class="bottom">
+        <div class="middle">
             Health: {{ health }}
             Room: {{ room }}
             <button @click="run" :disabled="!canRun">Run</button>
