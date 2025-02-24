@@ -14,6 +14,7 @@ createApp({
         const room = ref(0)
         const canRun = ref(true)
         const canUse = ref(true)
+        const remaning = ref(deck.cards.length)
 
         watch(health, (newValue) => {
             if(newValue <= 0) {
@@ -72,6 +73,7 @@ createApp({
 
             canRun.value = true
             canUse.value = true
+            remaning.value = deck.cards.length
         }
 
         function removeFromRoom(card) {
@@ -120,7 +122,8 @@ createApp({
             room,
             run,
             canRun,
-            canUse
+            canUse,
+            remaning
         }
     },
 
