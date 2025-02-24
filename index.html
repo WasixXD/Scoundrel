@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoundrel</title>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="dragula.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #323532;
+        }
+
+        .card {
+            width: 250px;
+            height: 350px;
+        }
+
+        .top {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            height: 350px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        #deck {
+            width: fit-content;
+            align-self: start;
+            background-color: grey;
+            height: 350px;
+            width: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #room {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            min-width: 1250px;
+            padding: 10px;
+
+            width: 250px;
+            height: 350px;
+            background-color: #BB3524;
+        }
+
+        .bottom {
+            margin: 2px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #weapon {
+            width: 250px;
+            height: 350px;
+        } 
+
+        #dropzone {
+            width: 100%;
+            height: 350px;
+            margin-left: 10px;
+            width: 1000px;
+            background-color: #5A5D56;
+        }
+
+        .card-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translate(0, -10px) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(-2px, -11px) rotate(-1deg);
+            }
+
+            50% {
+                transform: translate(2px, -9px) rotate(1deg);
+            }
+
+            75% {
+                transform: translate(-1px, -10px) rotate(-0.5deg);
+            }
+
+            100% {
+                transform: translate(0, -10px) rotate(0deg);
+            }
+        }
+
+        .monster:hover {
+            transform: translateY(-10px);
+            animation: shake 0.2s ease-in-out infinite;
+        }
+
+        .item:hover+.buttons,
+        .buttons:hover {
+            opacity: 1;
+        }
+
+        .buttons {
+            position: absolute;
+            top: 20%;
+            left: 99.5%;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .buttons button {
+            border-radius: 0px 15px 15px 0;
+            background-color: #8F8A76;
+            border: none;
+            padding: 10px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="app">
+        <div class="top">
+
+            <div id="deck" @click="roomCards.length <= 1 ? getCards() : null">
+                DUNGEON
+            </div>
+
+            <div id="room">
+                <div class="card-container" v-for="card in roomCards" :key="card.name">
+                    <img class="item card" :class="{ 'monster': card.isMonster }" :src="card.sprite"
+                        @click="card.isMonster ? bareHands(card) : null" :id="card.name" />
+                    <div class="buttons" v-if="!card.isMonster">
+                        <button @click="equip(card)" v-if="card.name.includes('T')">EQUIP</button>
+                        <button @click="use(card)" v-else-if="card.name.includes('H')">USE</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="discard">
+                <div class="card"> </div>
+            </div>
+        </div>
+        <div class="bottom">
+            Health: {{ health }}
+            Room: {{ room }}
+            <button @click="run" :disabled="!canRun">Run</button>
+        </div>
+
+        <div class="bottom">
+            <div id="weapon" :style="{ width: '250px', height: '350px', border: weapon.name !== 'none' ? '' : '1px solid black' }">
+                <img class="card" :src="weapon.sprite"> </img>
+            </div>
+
+            <div class="area" id="dropzone">
+                <img class="item card" v-for="card of dropzone" :key="card.name" :src="card.sprite"> </img>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.3/dragula.min.js'></script>
+<script src="cards.js" type="module"></script>
+<script src="classes.js" type="module"></script>
+<script src="index.js" type="module"></script>
+
+</html>
