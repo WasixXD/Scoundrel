@@ -94,7 +94,7 @@ createApp({
 
         function bareHands(card) {
             removeFromRoom(card)
-            health.value -=  Math.max(0, card.value - weapon.value.value)
+            health.value -=  Math.max(0, card.value)
             showTakenDmg.value = 0
             
         }
