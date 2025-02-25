@@ -177,6 +177,19 @@
             color: white;
             cursor: pointer;
         }
+
+        .run {
+            padding: 5px;
+            background-color: var(--dark-color);
+            color: white;
+            text-transform: uppercase ;
+            font-family: 'Jaro';
+            font-size: 15px;
+            width: 60px;
+        }
+        .run:disabled {
+            color: gray;
+        }
     </style>
 
 </head>
@@ -194,7 +207,7 @@
             <div id="room">
                 <div class="card-container" v-for="card in roomCards" :key="card.name">
                     <img class="item card" :class="{ 'monster': card.isMonster }" :src="card.sprite"
-                        @click="card.isMonster ? bareHands(card) : null" :id="card.name" />
+                        @click="card.isMonster ? bareHands(card) : null" :id="card.name"  @mouseover="calculateDmg(card)" @mouseleave="showTakenDmg = 0" />
                     <div class="buttons" v-if="!card.isMonster">
                         <button @click="equip(card)" v-if="card.name.includes('T')">EQUIP</button>
                         <button @click="use(card)" v-else-if="card.name.includes('H')">USE</button>
@@ -207,13 +220,13 @@
             </div>
         </div>
         <div class="middle">
-            <i class="fa-solid fa-heart"></i> Health: {{ health }} |
+            <i class="fa-solid fa-heart"></i> Health: {{ health }} {{ showTakenDmg !== 0? `(-${showTakenDmg})` : "" }} |
             <i class="fa-solid fa-dungeon"></i> Room: {{ room }}
-            <button @click="run" :disabled="!canRun">Run</button>
+            <button @click="run" :disabled="!canRun" class="run">Run</button>
         </div>
 
         <div class="bottom">
-            <div id="weapon" :style="{ width: '250px', height: '350px', border: weapon.name !== 'none' ? '' : '1px solid black' }">
+            <div id="weapon" :style="{ width: '250px', height: '350px', border: '1px solid black' }">
                 <img class="card" :src="weapon.sprite"> </img>
             </div>
 

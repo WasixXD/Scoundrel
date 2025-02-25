@@ -15,6 +15,7 @@ createApp({
         const canRun = ref(true)
         const canUse = ref(true)
         const remaning = ref(deck.cards.length)
+        const showTakenDmg = ref(0)
 
         watch(health, (newValue) => {
             if(newValue <= 0) {
@@ -22,6 +23,14 @@ createApp({
                 // this is terrible
                 // if we reload we need to reload the images
                 // change this
+                location.reload()
+            }
+        })
+
+        watch([remaning, roomCards], ([newRemaining, newRoomCards]) => {
+
+            if(newRemaining === 0 && newRoomCards.length === 0) {
+                alert("Você ganhou")
                 location.reload()
             }
         })
@@ -39,6 +48,7 @@ createApp({
             health.value -=  Math.max(0, card.value - weapon.value.value)
             dropzone.value.push(card)
             removeFromRoom(card)
+            showTakenDmg.value = 0
         }
 
         nextTick(() => {
@@ -63,7 +73,6 @@ createApp({
                 },
                 removeOnSpill: false
             }).on("drop", killWithWeapon)
-            
         })
 
         function getCards() {
@@ -85,7 +94,9 @@ createApp({
 
         function bareHands(card) {
             removeFromRoom(card)
-            health.value -= card.value
+            health.value -=  Math.max(0, card.value - weapon.value.value)
+            showTakenDmg.value = 0
+            
         }
 
         function equip(card) {
@@ -108,6 +119,12 @@ createApp({
             canRun.value = false
         }
 
+        function calculateDmg(card) {
+            if(!card.isMonster) return
+            showTakenDmg.value = card.value
+
+        }
+
 
         return {
             roomCards,
@@ -123,7 +140,9 @@ createApp({
             run,
             canRun,
             canUse,
-            remaning
+            remaning,
+            calculateDmg,
+            showTakenDmg
         }
     },
 
