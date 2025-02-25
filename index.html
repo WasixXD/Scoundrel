@@ -191,6 +191,49 @@
         .run:disabled {
             color: gray;
         }
+
+        .ach {
+            background-color: var(--accent-color);
+            width: 350px;
+            height: fit-content;
+            position: absolute;
+            color: var(--background-color);
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: start;
+            border-radius: 0 5px 5px 0; 
+        }
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOutRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+        }
+
+        .fade-enter-active {
+            animation: fadeInRight 0.5s ease-out;
+        }
+
+        .fade-leave-active {
+            animation: fadeOutRight 0.5s ease-in;
+        }
+
     </style>
 
 </head>
@@ -198,8 +241,14 @@
 <body>
 
     <div id="app">
-        <div class="top">
+        <transition name="fade">
+            <div v-if="kingSlayer" class="ach">
+                <span style="padding: 5px; font-size: 25px;">King Slayer! <i class="fa-solid fa-crown"></i> </span>
+                <span style="padding: 10px">Kill an A, K, Q, J in sequence</span>
+            </div>
+        </transition>
 
+        <div class="top">
             <div id="deck" @click="roomCards.length <= 1 ? getCards() : null">
                 <p>DUNGEON <i class="fa-solid fa-hand-pointer"></i></p>
                 <h1>CARDS LEFT: {{ remaning }}</h1>

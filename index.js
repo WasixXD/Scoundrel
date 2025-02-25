@@ -18,6 +18,7 @@ createApp({
         const canUse = ref(true)
         const remaning = ref(deck.cards.length)
         const showTakenDmg = ref(0)
+        const kingSlayer = ref(false)
 
         watch(health, (newValue) => {
             if(newValue <= 0) {
@@ -34,6 +35,29 @@ createApp({
             if(newRemaining === 0 && newRoomCards.length === 0) {
                 alert("Você ganhou")
                 location.reload()
+            }
+        })
+
+        // for now this will do
+        watch(dropzone, (slayed) => {
+            let count = 0
+            for(let card of slayed) {
+                if(card.value === 14 || card.value === 13 || card.value === 12 || card.value === 11) {
+                    count++
+                }
+            }
+
+            if(count === 4) {
+                kingSlayer.value = true
+            }
+        })
+
+        watch(kingSlayer, (value) => {
+            if(value) {
+                let int = setInterval(() => {
+                    kingSlayer.value = false
+                    clearInterval(int)
+                }, 3000)
             }
         })
 
@@ -151,7 +175,8 @@ createApp({
             canUse,
             remaning,
             calculateDmg,
-            showTakenDmg
+            showTakenDmg,
+            kingSlayer
         }
     },
 
