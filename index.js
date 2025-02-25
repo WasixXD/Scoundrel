@@ -2,6 +2,8 @@ import { Card, Deck } from "./classes.js"
 import { cards } from "./cards.js"
 const { createApp, ref, nextTick, watch } = Vue
 
+const hit = new Audio("./audio/barehands.wav")
+const sword = new Audio("./audio/swordhit.wav")
 
 createApp({
     setup() {
@@ -49,6 +51,7 @@ createApp({
             dropzone.value.push(card)
             removeFromRoom(card)
             showTakenDmg.value = 0
+            sword.play()
         }
 
         nextTick(() => {
@@ -73,6 +76,12 @@ createApp({
                 },
                 removeOnSpill: false
             }).on("drop", killWithWeapon)
+            .on("over", (el, target) => {
+                if(weapon.value.name === "none") return
+
+                const card = deck.getCard(el.firstChild.id)
+                showTakenDmg.value = Math.abs(Math.max(0, card.value - weapon.value.value))
+            })
         })
 
         function getCards() {
@@ -96,7 +105,7 @@ createApp({
             removeFromRoom(card)
             health.value -=  Math.max(0, card.value)
             showTakenDmg.value = 0
-            
+            hit.play() 
         }
 
         function equip(card) {
