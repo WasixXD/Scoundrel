@@ -6,14 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scoundrel</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="stylesheet" href="dragula.css">
 
     <style>
+
+        :root {
+            --background-color: #FEFEFE;
+            --primary-color: #F05F73;
+            --accent-color: #FC515B;
+            --dark-color: #562731
+        }
         body {
             margin: 0;
             padding: 0;
-            background-color: #323532;
+            background-color: var(--background-color);
+            font-family: 'Jaro';
         }
 
         .card {
@@ -29,15 +42,17 @@
             height: 350px;
             width: 100%;
             padding: 20px;
+            margin-top: 20px;
         }
 
         #deck {
             width: fit-content;
             align-self: start;
-            background-color: grey;
+            background-color: var(--primary-color);
             height: 350px;
             width: 250px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
@@ -53,7 +68,7 @@
 
             width: 250px;
             height: 350px;
-            background-color: #BB3524;
+            background-color: var(--dark-color);
         }
 
         .bottom {
@@ -68,8 +83,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--dark-color);
             gap: 10px;
+            padding: 10px;
+            font-size: 2rem;
         }
 
         .middle button {
@@ -85,9 +102,22 @@
         #dropzone {
             width: 100%;
             height: 350px;
+            max-height: 350px;
             margin-left: 10px;
-            width: 1000px;
-            background-color: #5A5D56;
+            width: 1020px;
+            padding: 10px;
+            background-color: var(--accent-color);
+            display: flex;
+            position: relative;
+            flex-direction: row;
+            align-items: start;
+            justify-content: start;
+        }
+        #dropzone .item.card {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            transform: translateX(calc(var(--index) * 50px)); 
         }
 
         .card-container {
@@ -140,7 +170,7 @@
 
         .buttons button {
             border-radius: 0px 15px 15px 0;
-            background-color: #8F8A76;
+            background-color: var(--primary-color);
             border: none;
             padding: 10px;
             font-weight: 700;
@@ -157,7 +187,8 @@
         <div class="top">
 
             <div id="deck" @click="roomCards.length <= 1 ? getCards() : null">
-                DUNGEON {{ remaning }}
+                <p>DUNGEON</p>
+                <h1>CARDS LEFT: {{ remaning }}</h1>
             </div>
 
             <div id="room">
@@ -176,8 +207,8 @@
             </div>
         </div>
         <div class="middle">
-            Health: {{ health }}
-            Room: {{ room }}
+            <i class="fa-solid fa-heart"></i> Health: {{ health }} |
+            <i class="fa-solid fa-dungeon"></i> Room: {{ room }}
             <button @click="run" :disabled="!canRun">Run</button>
         </div>
 
@@ -186,8 +217,8 @@
                 <img class="card" :src="weapon.sprite"> </img>
             </div>
 
-            <div class="area" id="dropzone">
-                <img class="item card" v-for="card of dropzone" :key="card.name" :src="card.sprite"> </img>
+            <div class="area" id="dropzone" style="overflow-x: auto;">
+                <img class="item card" v-for="(card, index) of dropzone" :key="card.name" :src="card.sprite" style="margin: 0 5px 0 5px;" :style="{ '--index': index }" > </img>
             </div>
         </div>
     </div>
